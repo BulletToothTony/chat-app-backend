@@ -1,4 +1,5 @@
 // require model
+const Chat = require('../models/chat')
 
 const chatList = [
     {
@@ -46,7 +47,7 @@ const getChatByID = (req, res, next) => {
     return res.json({chat})
 }
 
-const postChatMessage = (req, res, next) => {
+const postChatMessage = async (req, res, next) => {
     const {cid} = req.params;
     console.log(req.body)
     const {messageId, text} = req.body;
@@ -56,7 +57,30 @@ const postChatMessage = (req, res, next) => {
     chatToUpdate[0].messages.push({messageId: messageId, text: text})
     console.log(chatToUpdate[0].messages, 'chatToUpdate')
 
+    const createdChat = new Chat({
+        messages: [
+            {
+              text: 'Hi',
+              sender: '663e856213f3ee53bd09e3e0',
+            },
+          ],
+          users: [
+            {
+              user: '663e856213f3ee53bd09e3e0',
+            },
+          ],
+      });
+
+    
+    try {
+        await createdChat.save()
+    } catch(err) {
+        console.log(err)
+    }
+
     return res.json({messages: chatList})
+
+
 }
 
 exports.getAllChats = getAllChats;

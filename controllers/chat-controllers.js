@@ -46,5 +46,19 @@ const getChatByID = (req, res, next) => {
     return res.json({chat})
 }
 
+const postChatMessage = (req, res, next) => {
+    const {cid} = req.params;
+    console.log(req.body)
+    const {messageId, text} = req.body;
+
+    const chatToUpdate = chatList.filter((chat) => chat.id === cid)
+    console.log(chatToUpdate)
+    chatToUpdate[0].messages.push({messageId: messageId, text: text})
+    console.log(chatToUpdate[0].messages, 'chatToUpdate')
+
+    return res.json({messages: chatList})
+}
+
 exports.getAllChats = getAllChats;
 exports.getChatByID = getChatByID;
+exports.postChatMessage = postChatMessage;

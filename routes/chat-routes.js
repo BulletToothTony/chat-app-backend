@@ -8,5 +8,7 @@ router.get('/', chatControllers.getAllChats)
 
 router.get('/:cid', chatControllers.getChatByID)
 
+router.post('/:cid', chatControllers.postChatMessage)
+
 
 module.exports = router;

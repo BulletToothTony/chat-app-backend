@@ -10,6 +10,8 @@ router.get('/:uid', usersControllers.getSingleUser)
 
 router.patch('/:uid', usersControllers.updateUser)
 
+router.post('/signup', usersControllers.signup)
 
+router.post('/login', usersControllers.login)
 
 module.exports = router;

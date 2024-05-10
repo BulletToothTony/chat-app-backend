@@ -23,9 +23,6 @@ const getSingleUser = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-    console.log('testing update')
-    console.log(req.body)
-
     const {name} = req.body
     const {uid} = req.params
 
@@ -35,11 +32,9 @@ const updateUser = (req, res, next) => {
         
         user[0].name = name
     } else {
-        return res.status(404).json({error: 'oh no!'})
+        return res.status(404).json({error: 'ID not found!'})
     }
-
-    console.log(user, 'user')
-    console.log(usersList, 'userList')
+    return res.json({user})
 
 }
 

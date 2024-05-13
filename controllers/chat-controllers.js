@@ -71,24 +71,22 @@ const createNewChat = async (req, res, next) => {
   res.json({createdChat})
 }
 
-const getChatByID = (req, res, next) => {
+const getChatByID = async (req, res, next) => {
   const { cid } = req.params;
-  const chat = chatList.filter((chat) => chat.id === cid);
 
-  return res.json({ chat });
+  let foundChat;
+  try {
+    foundChat = await Chat.findOne({_id: cid})
+  } catch(err) {
+    console.log(err)
+  }
+
+  return res.json({ chat: foundChat });
 };
 
 const postChatMessage = async (req, res, next) => {
   const { cid } = req.params;
-  console.log(req.body);
   const { sendinguserId, messageId, text } = req.body;
-
-  // const chatToUpdate = chatList.filter((chat) => chat.id === cid)
-  // console.log(chatToUpdate)
-  // chatToUpdate[0].messages.push({messageId: messageId, text: text})
-  // console.log(chatToUpdate[0].messages, 'chatToUpdate')
-
-  // // check if chat exists
 
   let existingChat;
   try {
@@ -97,40 +95,10 @@ const postChatMessage = async (req, res, next) => {
       { $push: { messages: { text: text, sender: sendinguserId, timestamp: new Date()} } },
       { new: true }
     );
-    console.log(existingChat, "existing chat");
   } catch (err) {
-    console.log(err, "error signing up");
   }
 
-//   await existingChat.update({
-//     $push: { messages: { text: text, sender: sendinguserId } },
-//   });
-
-  // if (!existingChat) {
-  //   throw new Error("User already exists");
-  // }
-
-  // const createdChat = new Chat({
-  //     messages: [
-  //         {
-  //           text: 'Hi',
-  //           sender: '663e856213f3ee53bd09e3e0',
-  //         },
-  //       ],
-  //       users: [
-  //         {
-  //           user: '663e856213f3ee53bd09e3e0',
-  //         },
-  //       ],
-  //   });
-
-  // try {
-  //     await createdChat.save()
-  // } catch(err) {
-  //     console.log(err)
-  // }
-
-  return res.json({ messages: chatList });
+  return res.json({ messages: existingChat });
 };
 
 exports.getAllChats = getAllChats;

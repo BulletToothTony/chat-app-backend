@@ -4,13 +4,18 @@ const Chat = require("../models/chat");
 const getAllChats = async (req, res, next) => {
   // need to change this to getAllChats for logged in user
   // e.g. getAllChatsForUserID or getAllChatsForLoggedInUser
-
+    const {uid} = req.params
   let allChats
   try {
-    allChats = await Chat.find({})
+    allChats = await Chat.find({ 'users.user': uid }).populate({
+        path: 'messages.sender',
+        select: 'username' // Select the username field to populate
+      }, )
   } catch (err) {
     console.log(err)
   }
+
+  console.log(allChats, 'ALLCHATS')
 
   return res.json({ chats: allChats });
 };
@@ -18,14 +23,19 @@ const getAllChats = async (req, res, next) => {
 const createNewChat = async (req, res, next) => {
     // this will be used if there isn't a current chat between the 2 users
     // include in req.body both users that should be added to this chat, then add both in users array
+    console.log(req.body)
+    const {loggedInUser, addedUser, loggedInUserUsername, addedUserUsername} = req.body
+
       const createdChat = new Chat({
       messages: [],
         users: [
           {
-            user: '663e856213f3ee53bd09e3e0',
+            user: loggedInUser,
+            username: loggedInUserUsername
           },
           {
-            user: '663e8a3c61c8439921e03ffe',
+            user: addedUser,
+            username: addedUserUsername
           },
         ],
     });
@@ -44,7 +54,14 @@ const getChatByID = async (req, res, next) => {
 
   let foundChat;
   try {
-    foundChat = await Chat.findOne({_id: cid})
+    foundChat = await Chat.findOne({_id: cid}).populate({
+                              path: 'messages.sender',
+                              select: 'username'
+                           })
+                           .populate({
+                            path: 'users.user',
+                            select: 'username'
+                         });
   } catch(err) {
     console.log(err)
   }

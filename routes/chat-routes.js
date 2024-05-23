@@ -4,9 +4,9 @@ const chatControllers = require("../controllers/chat-controllers");
 
 const router = express.Router();
 
-router.get("/", chatControllers.getAllChats);
+router.get("/:uid", chatControllers.getAllChats);
 
-router.get("/:cid", chatControllers.getChatByID);
+router.get("/chatById/:cid", chatControllers.getChatByID);
 
 router.post("/createChat", chatControllers.createNewChat);
 

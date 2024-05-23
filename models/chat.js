@@ -9,13 +9,14 @@ const chatSchema = new Schema(
       {
         text: { type: String, required: true },
         sender: { type: mongoose.Types.ObjectId, ref: "User", required: true },
-        time: {type: Date, default: Date.now()}
+        time: {type: Date, default: Date.now}
         // might need to add more to this to include images
       },
     ],
     users: [
       {
         user: { type: mongoose.Types.ObjectId, ref: "User", required: true },
+        username: { type: String, required: true }
       },
     ],
   },

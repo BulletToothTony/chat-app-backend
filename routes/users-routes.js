@@ -4,7 +4,7 @@ const usersControllers = require('../controllers/users-controllers')
 
 const router = express.Router();
 
-router.get('/', usersControllers.getUsers)
+router.get('/', usersControllers.getAllUsers)
 
 router.get('/:uid', usersControllers.getSingleUser)
 

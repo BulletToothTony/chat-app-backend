@@ -39,22 +39,35 @@ const getSingleUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const { username, email } = req.body;
+  const { username, email, password } = req.body;
   const { uid } = req.params;
   console.log(uid);
   console.log(req.body);
 
+  const updateFields = {};
+  if (username !== '') updateFields.username = username;
+  if (email !== '') updateFields.email = email;
+  if (password !== '') {
+  try {
+    const hashedPass = await bcrypt.hash(password, 12);
+    updateFields.password = hashedPass
+  } catch (err) {
+    console.log(err, "error hashing pass");
+  }
+
+  }
+
   let updatedUser
   try {
-    if (username && email) {
-      updatedUser = await User.findByIdAndUpdate(uid, { username: username, email: email }, {new: true});
-    } else if (username && email === '') {
-      updatedUser = await User.findByIdAndUpdate(uid, { username: username }, {new: true});
-    }else if (username === '' && email) {
-      updatedUser = await User.findByIdAndUpdate(uid, { email: email }, {new: true});
+    if (Object.keys(updateFields).length > 0) {
+      updatedUser = await User.findByIdAndUpdate(uid, updateFields, {new: true});
+    } else {
+      return res.status(400).json({ message: 'No valid fields to update' });
     }
   } catch (err) {
     console.log(err);
+    return res.status(500).json({ message: 'Updating user failed, please try again' });
+
   }
 
   console.log(updatedUser, 'updateduser');

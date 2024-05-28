@@ -29,6 +29,10 @@ app.use((req, res, next) => {
 //   res.json('Hello World!')
 // })
 
+app.get('/api/hello', (req, res) => {
+  res.send('Hello World!');
+});
+
 app.use('/api/users', usersRoutes)
 app.use('/api/chats', chatRoutes)
 

@@ -11,6 +11,8 @@ dotenv.config()
 const usersRoutes = require('./routes/users-routes');
 const chatRoutes = require('./routes/chat-routes');
 
+app.use(cors())
+
 // app.use(cors({
 //   origin: 'https://chatme-frontend-jye8q8otj-henrys-projects-989000f2.vercel.app',
 //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],

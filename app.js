@@ -14,7 +14,7 @@ const chatRoutes = require('./routes/chat-routes');
 
 
 app.use(cors({
-  origin: 'https://chatme-frontend-vert.vercel.app',
+  origin: 'https://chat-me-7fz3.onrender.com',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
